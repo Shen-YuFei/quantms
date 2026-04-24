@@ -75,6 +75,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated quantms-rescoring (container permissions fix)
 - Migrated thermorawfileparser to bigbio/nf-modules
 
+### `Added`
+
+- Added optional pridepy pre-download module supporting aspera, globus (HTTPS), ftp, and s3 protocols. Controlled by `--pridepy_download` (default `false`) and `--pridepy_protocol` (default `aspera`). Pre-downloaded raw files are reused by the pipeline via `--project_accession`, avoiding Nextflow staging concurrency issues with EBI servers.
+
+### `Dependencies`
+
+- Added pridepy==0.0.14
+
 ### `Deprecations`
 
 - **BREAKING: Deprecated OpenMS experimental design format as input**: The pipeline now only accepts SDRF (Sample to Data Relation Format) files as input. The OpenMS experimental design format (`.tsv` without SDRF structure) is no longer supported. All input files are now treated as SDRF regardless of file extension. Supported file extensions for SDRF input are `.sdrf`, `.tsv`, and `.csv`. This change aligns with nf-core best practices and simplifies input handling for cloud storage interfaces like Seqera Datastudios and Explorer. Users must convert their OpenMS experimental design files to SDRF format. The `--labelling_type` and `--acquisition_method` parameters are no longer used for determining input file type - all information must be specified in the SDRF file.

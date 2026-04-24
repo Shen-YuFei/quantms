@@ -1,0 +1,50 @@
+nextflow_process {
+
+    name "Test Process PRIDEPY_DOWNLOAD"
+    script "../main.nf"
+    process "PRIDEPY_DOWNLOAD"
+    tag "modules"
+    tag "modules_pridepy"
+    tag "pridepy"
+
+    test("Should download raw files by accession") {
+
+        when {
+            process {
+                """
+                input[0] = [ id: 'PXD001819' ]
+                """
+            }
+            params {
+                pridepy_protocol = 'globus'
+                aspera_maximum_bandwidth = '500M'
+            }
+        }
+
+        then {
+            assert process.success
+            assert snapshot(process.out.versions).match("versions_download")
+            assert process.out.download_dir.size() == 1
+        }
+    }
+
+    test("Should run stub mode") {
+
+        tag "stub"
+
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = [ id: 'PXD001819' ]
+                """
+            }
+        }
+
+        then {
+            assert process.success
+            assert snapshot(process.out.versions).match("versions_stub")
+        }
+    }
+}

@@ -34,6 +34,10 @@
 
   > Hulstaert N, Shofstahl J, Sachsenberg T, Walzer M, Barsnes H, Martens L, Perez-Riverol Y. ThermoRawFileParser: Modular, Scalable, and Cross-Platform RAW File Conversion. J Proteome Res. 2020 Jan 3;19(1):537-542. doi: 10.1021/acs.jproteome.9b00328. Epub 2019 Dec 6. PMID: 31755270; PMCID: PMC7116465.
 
+- [pridepy](https://github.com/PRIDE-Archive/pridepy)
+
+  > Perez-Riverol Y, Bandla C, Kundu DJ, et al. The PRIDE database at 20 years: 2025 update. Nucleic Acids Research. 2024 Nov 13;53(D1):D543-D553. doi: 10.1093/nar/gkae1011. PMID: 39494541; PMCID: PMC11701636. (Python client: https://github.com/PRIDE-Archive/pridepy)
+
 - [sdrf-pipelines](https://pubmed.ncbi.nlm.nih.gov/34615866/)
 
   > Dai C, Füllgrabe A, Pfeuffer J, Solovyeva EM, Deng J, Moreno P, Kamatchinathan S, Kundu DJ, George N, Fexova S, Grüning B, Föll MC, Griss J, Vaudel M, Audain E, Locard-Paulet M, Turewicz M, Eisenacher M, Uszkoreit J, Van Den Bossche T, Schwämmle V, Webel H, Schulze S, Bouyssié D, Jayaram S, Duggineni VK, Samaras P, Wilhelm M, Choi M, Wang M, Kohlbacher O, Brazma A, Papatheodorou I, Bandeira N, Deutsch EW, Vizcaíno JA, Bai M, Sachsenberg T, Levitsky LI, Perez-Riverol Y. A proteomics sample metadata representation for multiomics integration and big data analysis. Nat Commun. 2021 Oct 6;12(1):5854. doi: 10.1038/s41467-021-26111-3. PMID: 34615866; PMCID: PMC8494749.

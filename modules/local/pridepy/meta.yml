@@ -1,0 +1,38 @@
+name: pridepy
+description: Python client for PRIDE Archive — download and query proteomics datasets
+keywords:
+  - pride
+  - download
+  - proteomics
+  - raw files
+  - globus
+  - aspera
+tools:
+  - pridepy:
+      description: |
+        pridepy is a Python client for the PRIDE Archive REST API.
+        It supports downloading public/private files via FTP, Aspera, Globus (HTTPS), or S3,
+        as well as querying project metadata and file listings.
+        The specific sub-command and arguments are passed via task.ext.args.
+      homepage: https://github.com/PRIDE-Archive/pridepy
+      documentation: https://github.com/PRIDE-Archive/pridepy
+      tool_dev_url: https://github.com/PRIDE-Archive/pridepy
+      doi: ""
+      licence: ["Apache-2.0"]
+input:
+  - meta:
+      type: map
+      description: |
+        Groovy Map containing task information.
+        e.g. [ id:'PXD001819' ]
+output:
+  - download_dir:
+      type: directory
+      description: Directory containing downloaded files (for download sub-commands)
+      pattern: "output/"
+  - versions:
+      type: file
+      description: File containing software versions
+      pattern: "versions.yml"
+authors:
+  - "@ypriverol"

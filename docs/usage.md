@@ -70,6 +70,30 @@ genome: 'GRCh37'
 
 You can also generate such `YAML`/`JSON` files via [nf-core/launch](https://nf-co.re/launch).
 
+### Pre-downloading raw files from PRIDE (optional)
+
+If your input SDRF references raw files hosted on the PRIDE Archive, you can ask the pipeline to fetch them locally with [pridepy](https://github.com/PRIDE-Archive/pridepy) before staging. This avoids Nextflow staging concurrency issues against EBI servers and lets one local copy be reused across runs:
+
+```bash
+nextflow run bigbio/quantms \
+    --input '/path/to/PXD003209.sdrf.tsv' \
+    --database '/path/to/database.fasta' \
+    --outdir './results' \
+    --project_accession PXD003209 \
+    --pridepy_download true \
+    --pridepy_protocol aspera \
+    -profile docker
+```
+
+Relevant parameters:
+
+- `--pridepy_download` (default `false`) — enable the pre-download stage.
+- `--pridepy_protocol` (default `aspera`) — one of `aspera`, `globus` (HTTPS), `ftp`, `s3`.
+- `--project_accession` — PRIDE / ProteomeXchange accession (e.g. `PXD001819`). Required when `--pridepy_download true`.
+- `--aspera_maximum_bandwidth` (default `500M`) — aspera bandwidth cap.
+
+Downloaded files are placed under `<outdir>/pride_downloads/output/` and are reused automatically when the SDRF `comment[file uri]` filename matches a downloaded file.
+
 ### Updating the pipeline
 
 When you run the above command, Nextflow automatically pulls the pipeline code from GitHub and stores it as a cached version. When running the pipeline after this, it will always use the cached version if available - even if the pipeline has been updated since. To make sure that you're running the latest version of the pipeline, make sure that you regularly update the cached version of the pipeline:

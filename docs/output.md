@@ -167,6 +167,20 @@ The specific files include:
 
 ## Output description
 
+### PRIDE pre-download (optional)
+
+Generated only when `--pridepy_download true` is set. Raw files fetched via [pridepy](https://github.com/PRIDE-Archive/pridepy) are staged here for reuse by downstream stages (see [Pre-downloading raw files from PRIDE](usage.md#pre-downloading-raw-files-from-pride-optional) in usage docs).
+
+<details markdown="1">
+<summary>Output files</summary>
+
+`pride_downloads/output/`:
+
+- `<filename>.raw` and other raw spectra files declared in the SDRF `comment[file uri]` column.
+- `<accession>-checksum.tsv` — sha1 checksums reported by the PRIDE Archive for the downloaded files.
+
+</details>
+
 ### Nextflow pipeline info
 
 [Nextflow](https://www.nextflow.io/docs/latest/tracing.html) provides excellent functionality for generating various reports relevant to the running and execution of the pipeline. This will allow you to troubleshoot errors with the running of the pipeline, and also provide you with other information such as launch commands, run times and resource usage.

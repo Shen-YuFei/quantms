@@ -978,6 +978,30 @@
                     "description": "Project accession (e.g. PRIDE accession) recorded in the QPX dataset provenance.",
                     "fa_icon": "fas fa-fingerprint"
                 },
+                "project_accession": {
+                    "type": "string",
+                    "description": "PRIDE / ProteomeXchange accession (e.g. PXD001819). Used as input for pridepy downloads.",
+                    "fa_icon": "fas fa-id-badge"
+                },
+                "pridepy_download": {
+                    "type": "boolean",
+                    "description": "Pre-download raw files from PRIDE Archive using pridepy before pipeline execution. Avoids Nextflow staging concurrency issues with EBI servers.",
+                    "default": false,
+                    "fa_icon": "fas fa-cloud-download-alt"
+                },
+                "pridepy_protocol": {
+                    "type": "string",
+                    "description": "Download protocol for pridepy: aspera, globus (HTTPS), ftp, or s3.",
+                    "default": "aspera",
+                    "enum": ["globus", "ftp", "aspera", "s3"],
+                    "fa_icon": "fas fa-network-wired"
+                },
+                "aspera_maximum_bandwidth": {
+                    "type": "string",
+                    "description": "Aspera maximum bandwidth cap used by pridepy when --pridepy_protocol is 'aspera'.",
+                    "default": "500M",
+                    "fa_icon": "fas fa-tachometer-alt"
+                },
                 "protein_quant_debug": {
                     "type": "integer",
                     "description": "Debug level for the protein quantification step. Increase for verbose logging",

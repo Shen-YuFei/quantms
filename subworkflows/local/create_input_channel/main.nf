@@ -8,6 +8,7 @@ include { SDRF_PARSING } from '../../../modules/local/sdrf_parsing/main'
 workflow CREATE_INPUT_CHANNEL {
     take:
     ch_sdrf
+    ch_download_dir  // value channel: path to pridepy download dir, or NO_DOWNLOAD sentinel
 
     main:
     ch_versions = channel.empty()
@@ -29,7 +30,8 @@ workflow CREATE_INPUT_CHANNEL {
 
     ch_config
         .splitCsv(header: true, sep: '\t')
-        .map { row -> create_meta_channel(row, enzymes, files, wrapper) }
+        .combine(ch_download_dir)
+        .map { row, download_dir -> create_meta_channel(row, enzymes, files, wrapper, download_dir) }
         .branch { item ->
             ch_meta_config_iso: item[0].labelling_type.contains("tmt") || item[0].labelling_type.contains("itraq")
             ch_meta_config_lfq: item[0].labelling_type.contains("label free")
@@ -46,7 +48,7 @@ workflow CREATE_INPUT_CHANNEL {
 }
 
 // Function to get list of [meta, [ spectra_files ]]
-def create_meta_channel(LinkedHashMap row, enzymes, files, wrapper) {
+def create_meta_channel(LinkedHashMap row, enzymes, files, wrapper, download_dir) {
     def meta = [:]
     def filestr
 
@@ -67,6 +69,15 @@ def create_meta_channel(LinkedHashMap row, enzymes, files, wrapper) {
         filestr = (params.local_input_type
             ? filestr.take(filestr.lastIndexOf('.')) + '.' + params.local_input_type
             : filestr)
+    }
+
+    // Check pridepy download directory for pre-downloaded files
+    if (download_dir.name != 'NO_DOWNLOAD') {
+        def fname = file(filestr).name
+        def local_path = download_dir.toString() + File.separator + fname
+        if (file(local_path).exists()) {
+            filestr = local_path
+        }
     }
 
     // existence check

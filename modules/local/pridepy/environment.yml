@@ -1,0 +1,7 @@
+name: pridepy
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - pridepy=0.0.14

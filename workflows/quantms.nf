@@ -22,6 +22,7 @@ include { DDA_ID } from '../subworkflows/local/dda_id/main'
 // Modules import from the pipeline
 include { PMULTIQC as SUMMARY_PIPELINE } from '../modules/bigbio/pmultiqc/main'
 include { GENERATE_DECOY_DATABASE } from '../modules/local/openms/generate_decoy_database/main'
+include { PRIDEPY_DOWNLOAD } from '../modules/local/pridepy/main'
 
 /*
 ========================================================================================
@@ -50,10 +51,23 @@ workflow QUANTMS {
     // ! There is currently no tooling to help you write a sample sheet schema
 
     //
+    // MODULE: PRIDEPY_DOWNLOAD — Optional pre-download of raw files from PRIDE
+    //
+    if (params.pridepy_download) {
+        INPUT_CHECK.out.ch_input_file.map { [id: params.project_accession ?: 'download'] }.set { ch_pridepy_meta }
+        PRIDEPY_DOWNLOAD(ch_pridepy_meta)
+        ch_versions = ch_versions.mix(PRIDEPY_DOWNLOAD.out.versions)
+        ch_download_dir = PRIDEPY_DOWNLOAD.out.download_dir
+    } else {
+        ch_download_dir = channel.value(file('NO_DOWNLOAD'))
+    }
+
+    //
     // SUBWORKFLOW: Create input channel
     //
     CREATE_INPUT_CHANNEL(
-        INPUT_CHECK.out.ch_input_file
+        INPUT_CHECK.out.ch_input_file,
+        ch_download_dir
     )
     ch_versions = ch_versions.mix(CREATE_INPUT_CHANNEL.out.versions)
 
