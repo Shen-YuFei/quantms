@@ -10,9 +10,14 @@
                         "git_sha": "1c93e068aeca6704d042b92c26249cdd801da278",
                         "installed_by": ["modules"]
                     },
-                    "qpx/openmsconsensus": {
+                    "pmultiqc": {
                         "branch": "main",
                         "git_sha": "7cd54b39383fed0257b916e1060608b7ef322023",
+                        "installed_by": ["modules"]
+                    },
+                    "qpx/openmsconsensus": {
+                        "branch": "main",
+                        "git_sha": "d9e1b05a107342fb5086aeb90fc3e68bc6b3f336",
                         "installed_by": ["modules"]
                     },
                     "thermorawfileparser": {
@@ -20,11 +25,6 @@
                         "git_sha": "53f2d78652a7040e3d44610286471642b1e1b55b",
                         "installed_by": ["modules"],
                         "patch": "modules/bigbio/thermorawfileparser/thermorawfileparser.diff"
-                    },
-                    "pmultiqc": {
-                        "branch": "main",
-                        "git_sha": "7cd54b39383fed0257b916e1060608b7ef322023",
-                        "installed_by": ["modules"]
                     }
                 }
             }
