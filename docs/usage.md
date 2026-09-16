@@ -20,7 +20,7 @@ The input file must be in [Sample-to-data-relationship format (SDRF)](https://pu
 
 Fixed modifications are read exclusively from the SDRF modification annotations. If the parsed `FixedModifications` value is empty, quantms preserves an empty fixed-modification set instead of rejecting the input or adding a default modification such as Carbamidomethyl (C). Annotate modifications according to the experimental protocol; a modification that is variable must not be declared fixed just to make the input pass validation.
 
-Variable modifications are read from the SDRF when present. If the parsed variable-modification set is empty, quantms uses `--variable_mods`, whose default is `Oxidation (M)`. An empty fixed-modification set with a nonempty variable-modification set is supported with Comet, MS-GF+, and Sage.
+Variable modifications are read from the SDRF when present. If the parsed variable-modification set is empty or contains only whitespace, quantms uses `--variable_mods`, whose default is `Oxidation (M)`. Leading and trailing whitespace is removed from the selected SDRF or fallback value before validation; a whitespace-only fallback is treated as an empty set. An empty fixed-modification set with a nonempty variable-modification set is supported with Comet, MS-GF+, and Sage.
 
 For a search without either fixed or variable modifications, select Comet and/or Sage and set `variable_mods` to an empty string. When `--search_engines` includes `msgf`, quantms rejects an empty final set of both modification types: the current OpenMS MSGFPlusAdapter would otherwise enable fixed Carbamidomethyl (C). This check runs after the variable-modification fallback has been applied.
 

@@ -181,9 +181,12 @@ def create_meta_channel(LinkedHashMap row, enzymes, files, wrapper) {
     } else {
         meta.variablemodifications = params.variable_mods
     }
+    meta.variablemodifications = meta.variablemodifications?.toString()?.trim() ?: ''
 
     if (params.search_engines.contains('msgf') && !meta.fixedmodifications && !meta.variablemodifications) {
-        exit(1, "ERROR: Both modification lists are empty for '${filestr}', but OpenMS MSGFPlusAdapter would enable fixed Carbamidomethyl (C) in this case. Use Comet or Sage for a search without modifications.")
+        exit(1, "ERROR: Both modification lists are empty for '${filestr}', " +
+            'but OpenMS MSGFPlusAdapter would enable fixed Carbamidomethyl (C) in this case. ' +
+            'Use Comet or Sage for a search without modifications.')
     }
 
     enzymes += row.Enzyme

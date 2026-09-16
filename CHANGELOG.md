@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Fixed`
 
 - Allow an empty fixed-modification set from SDRF without adding a default modification. Reject searches using MS-GF+ when both modification sets remain empty after the variable-modification fallback, to prevent OpenMS MSGFPlusAdapter from silently enabling fixed Carbamidomethyl (C).
+- Trim the selected variable-modification value before validation so a whitespace-only fallback cannot bypass the MS-GF+ empty-modification check.
 
 ## [1.10.0] bigbio/quantms - [15/08/2026] - [London]
 
