@@ -70,6 +70,11 @@ workflow TMT {
         ISOBARIC_WORKFLOW.out.out_consensusXML,
         file(params.input),
         params.accession ?: '',
+        // The database the search used. qpx fills null pg.sequence_coverage,
+        // pg.molecular_weight and feature.pg_positions from it; decoy entries are
+        // skipped, so the with-decoy database is safe to pass. .first() keeps this
+        // a value channel, since the same channel already feeds ID.
+        ch_database_wdecoy.first(),
     )
     ch_software_versions = ch_software_versions.mix(QPX_OPENMSCONSENSUS.out.versions)
 
