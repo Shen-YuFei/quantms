@@ -24,6 +24,32 @@ Variable modifications are read from the SDRF when present. If the parsed variab
 
 For a search without either fixed or variable modifications, select Comet and/or Sage and set `variable_mods` to an empty string. When `--search_engines` includes `msgf`, quantms rejects an empty final set of both modification types: the current OpenMS MSGFPlusAdapter would otherwise enable fixed Carbamidomethyl (C). This check runs after the variable-modification fallback has been applied.
 
+### Comet fragment binning
+
+Comet scores spectra using fixed-width fragment bins. Its native `fragment_bin_tol` is a **full bin width in Da**, not a ppm matching window. OpenMS `CometAdapter -fragment_mass_tolerance` takes **half** that width. quantms exposes the native width as `--comet_fragment_bin_tol` and divides it by two when calling the adapter.
+
+For ppm fragment tolerances, explicitly set all three Comet options: `--comet_fragment_bin_tol`, `--comet_fragment_bin_offset`, and `--comet_instrument`. For example, `--comet_fragment_bin_tol 0.03 --comet_fragment_bin_offset 0 --comet_instrument high_res` uses a 0.03 Da full bin, passing 0.015 Da to OpenMS. This example preserves quantms' former high-resolution Comet binning, **not an equivalent conversion from 20 ppm**. Select the settings based on the acquisition and the intended Comet search protocol. Missing settings now stop the search instead of guessing resolution from the numerical ppm value.
+
+Without Comet-specific bin settings, a Da SDRF tolerance keeps its existing interpretation as the adapter's half width, including the existing offset and instrument defaults. Supplying an explicit width or offset requires both values and an instrument mode. Width must be finite and at least 0.01 Da (also checked for the inherited Da path, so input tolerances below 0.005 Da are rejected); offset must be finite and between 0 and 1. An explicit offset of zero is preserved.
+
+For projects with mixed acquisition settings, use `ext.comet_fragment_bin_tol`, `ext.comet_fragment_bin_offset`, and `ext.comet_instrument` closures under `process.withName: 'COMET'`. These override the corresponding global settings. For the instrument mode, `params.instrument` is a final compatibility fallback shared with MS-GF+; use `comet_instrument` or its per-run override to change only Comet. Use verified run identifiers rather than inferring resolution from the ppm value:
+
+```groovy
+process {
+    withName: 'COMET' {
+        ext.comet_fragment_bin_tol = { meta.mzml_id == 'verified_high_res_run' ? 0.03 : null }
+        ext.comet_fragment_bin_offset = { meta.mzml_id == 'verified_high_res_run' ? 0.0 : null }
+        ext.comet_instrument = { meta.mzml_id == 'verified_high_res_run' ? 'high_res' : null }
+    }
+}
+```
+
+Keep global Comet-specific options unset when unlisted Da runs should retain their original settings. An unlisted ppm run fails with an explicit configuration error. Do not additionally override these options through `ext.args` or a Comet parameter file: those adapter options can take precedence over quantms' reported settings.
+
+The original SDRF value and unit are never changed. Other engines and rescoring continue to receive their original metadata. The Nextflow log records the run ID, input tolerance, full width, adapter half width, offset, instrument mode, and whether settings were explicit or derived from Da input (which may itself come from the configured fallback). An explicit, valid Comet configuration is logged at INFO; errors and other warnings remain visible.
+
+See the [Comet parameter documentation](https://uwpr.github.io/Comet/parameters/parameters_202602/fragment_bin_tol.html) and [OpenMS adapter documentation](https://openms.de/documentation/html/TOPP_CometAdapter.html).
+
 ### Fragment tolerance for MS2-based rescoring
 
 `MSRESCORE_FEATURES` passes the SDRF fragment mass tolerance value and unit together to quantms-rescoring. A value such as `20 ppm` remains `20 ppm`; it is not replaced with the configured Da fallback. Unit spelling is normalized to `Da` or `ppm` without changing the numeric value.

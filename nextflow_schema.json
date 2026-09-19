@@ -289,15 +289,37 @@
                     "description": "Fragment mass tolerance used for database search. The default of 0.03 Da is for high-resolution instruments.",
                     "default": 0.03,
                     "fa_icon": "fas fa-sliders-h",
-                    "help_text": "Caution: for Comet we are estimating the `fragment_bin_tolerance` parameter based on this automatically. This value can be overridden via command line. If not specified, the value from the SDRF file will be used."
+                    "help_text": "The SDRF value takes precedence over this fallback. Comet requires explicit comet_fragment_bin_tol, comet_fragment_bin_offset and comet_instrument settings for ppm input; Da input keeps the existing half-bin-width interpretation unless Comet-specific settings override it."
                 },
                 "fragment_mass_tolerance_unit": {
                     "type": "string",
                     "description": "Fragment mass tolerance unit used for database search. Possible values are 'ppm' and 'Da' (default).",
                     "default": "Da",
                     "fa_icon": "fas fa-list-ol",
-                    "help_text": "Caution: for Comet we are estimating the `fragment_bin_tolerance` parameter based on this automatically. This value can be overridden via command line. If not specified, the value from the SDRF file will be used.",
+                    "help_text": "The SDRF value takes precedence over this fallback. Comet requires explicit comet_fragment_bin_tol, comet_fragment_bin_offset and comet_instrument settings for ppm input; Da input keeps the existing half-bin-width interpretation unless Comet-specific settings override it.",
                     "enum": ["Da", "ppm"]
+                },
+                "comet_fragment_bin_tol": {
+                    "type": "number",
+                    "minimum": 0.01,
+                    "description": "Native Comet full fragment bin width in Da, independent of the SDRF fragment tolerance.",
+                    "help_text": "Required together with comet_fragment_bin_offset and comet_instrument for ppm fragment tolerance. OpenMS CometAdapter receives half this width. Does not change SDRF metadata or settings of other engines/rescoring. Per-run task.ext.comet_fragment_bin_tol overrides this value.",
+                    "fa_icon": "fas fa-sliders-h"
+                },
+                "comet_fragment_bin_offset": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1,
+                    "description": "Comet fragment bin offset as a fraction of the bin width (0 to 1).",
+                    "help_text": "Required with an explicit comet_fragment_bin_tol and comet_instrument. Common settings are 0.0 for high-resolution spectra and 0.4 for low-resolution spectra. Per-run task.ext.comet_fragment_bin_offset overrides this value; zero is a valid explicit setting.",
+                    "fa_icon": "fas fa-sliders-h"
+                },
+                "comet_instrument": {
+                    "type": "string",
+                    "enum": ["high_res", "low_res"],
+                    "description": "Comet-only fragment-ion representation, independent of other search engines.",
+                    "help_text": "Set with explicit Comet width and offset. Per-run task.ext.comet_instrument overrides this value; the shared instrument parameter is used only when neither override is set.",
+                    "fa_icon": "fas fa-sliders-h"
                 },
                 "variable_mods": {
                     "type": "string",
@@ -323,7 +345,7 @@
                 },
                 "instrument": {
                     "type": "string",
-                    "description": "Type of instrument that generated the data. 'low_res' or 'high_res' (default; refers to LCQ and LTQ instruments)",
+                    "description": "Shared high_res/low_res instrument setting used by Comet and MS-GF+. Use comet_instrument for a Comet-only override; when unset, engines infer their mode from the fragment tolerance.",
                     "fa_icon": "fas fa-list-ol"
                 },
                 "protocol": {
