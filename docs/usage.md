@@ -24,6 +24,14 @@ Variable modifications are read from the SDRF when present. If the parsed variab
 
 For a search without either fixed or variable modifications, select Comet and/or Sage and set `variable_mods` to an empty string. When `--search_engines` includes `msgf`, quantms rejects an empty final set of both modification types: the current OpenMS MSGFPlusAdapter would otherwise enable fixed Carbamidomethyl (C). This check runs after the variable-modification fallback has been applied.
 
+### Fragment tolerance for MS2-based rescoring
+
+`MSRESCORE_FEATURES` passes the SDRF fragment mass tolerance value and unit together to quantms-rescoring. A value such as `20 ppm` remains `20 ppm`; it is not replaced with the configured Da fallback. Unit spelling is normalized to `Da` or `ppm` without changing the numeric value.
+
+The module uses `--ms2features_tolerance` and `--ms2features_tolerance_unit` only when both SDRF tolerance fields are absent. If only one field is missing, or the unit is unsupported, it stops with an error instead of combining SDRF and fallback values.
+
+MS2PIP with ppm requires MS2PIP 4.2 or newer and a quantms-rescoring adapter that supports its unit-aware API. The default quantms-rescoring `0.0.24` container does not provide this support. Before requesting MS2PIP with ppm, configure a compatible container for `MSRESCORE_FEATURES` in a custom Nextflow configuration. AlphaPeptDeep supports both Da and ppm.
+
 ### Supported file formats
 
 The pipeline supports the following mass spectrometry data file formats:

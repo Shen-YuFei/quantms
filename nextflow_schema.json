@@ -614,7 +614,7 @@
                 "ms2features_generators": {
                     "type": "string",
                     "description": "Feature generators for MS2-based rescoring. Comma-separated list of tools to use.",
-                    "help_text": "Available generators: 'deeplc' (retention time prediction, always recommended), 'alphapeptdeep' (MS2 prediction, supports both Da and ppm), 'ms2pip' (MS2 prediction, Da only). Order matters: deeplc should be first. Examples: 'deeplc,alphapeptdeep' (default), 'deeplc,ms2pip', 'deeplc' (only retention time).",
+                    "help_text": "Available generators: 'deeplc' (retention time prediction, always recommended), 'alphapeptdeep' (MS2 prediction, supports both Da and ppm), 'ms2pip' (MS2 prediction; ppm requires MS2PIP 4.2 or newer and a compatible quantms-rescoring adapter). Order matters: deeplc should be first. Examples: 'deeplc,alphapeptdeep' (default), 'deeplc,ms2pip', 'deeplc' (only retention time). The default quantms-rescoring 0.0.24 container does not support MS2PIP with ppm; configure a compatible container before using that combination.",
                     "fa_icon": "fas fa-font",
                     "default": "deeplc,alphapeptdeep"
                 },
@@ -627,14 +627,15 @@
                 },
                 "ms2features_tolerance": {
                     "type": "number",
-                    "description": "Fragment mass tolerance for MS2Features (fallback when SDRF values are incompatible)",
-                    "help_text": "Fallback tolerance value used when SDRF fragment tolerance cannot be used (e.g., ppm values with ms2pip). Should match your instrument's fragment mass accuracy. Typical values: 0.02-0.05 Da for high-resolution instruments, 0.1-0.5 Da for low-resolution instruments.",
+                    "description": "Fragment mass tolerance for MS2Features when the SDRF tolerance value and unit are both absent",
+                    "help_text": "Used together with ms2features_tolerance_unit only when both SDRF fragment tolerance fields are absent. A complete SDRF value/unit pair takes precedence, including ppm; its numeric value is passed unchanged. Incomplete pairs and unsupported units are rejected instead of falling back. MS2PIP with ppm requires MS2PIP 4.2 or newer and a compatible quantms-rescoring adapter; the default 0.0.24 container does not provide this support.",
                     "default": 0.05,
                     "fa_icon": "fas fa-sliders-h"
                 },
                 "ms2features_tolerance_unit": {
                     "type": "string",
-                    "description": "Unit for ms2features_tolerance (Da or ppm)",
+                    "description": "Unit paired with the fallback ms2features_tolerance (Da or ppm)",
+                    "help_text": "The fallback value and unit are used together only when both SDRF fragment tolerance fields are absent. Existing SDRF Da or ppm tolerances are not converted or replaced.",
                     "default": "Da",
                     "enum": ["Da", "ppm"],
                     "fa_icon": "fas fa-sliders-h"

@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Fixed`
 
+- Preserve the SDRF fragment tolerance value and Da/ppm unit in MS2-based rescoring; use the configured fallback only when both fields are absent, and reject incomplete pairs or unsupported units. MS2PIP with ppm requires a compatible quantms-rescoring container with MS2PIP 4.2 or newer; the default `0.0.24` container is unchanged and does not provide this support.
 - Allow an empty fixed-modification set from SDRF without adding a default modification. Reject searches using MS-GF+ when both modification sets remain empty after the variable-modification fallback, to prevent OpenMS MSGFPlusAdapter from silently enabling fixed Carbamidomethyl (C).
 - Trim the selected variable-modification value before validation so a whitespace-only fallback cannot bypass the MS-GF+ empty-modification check.
 
