@@ -65,7 +65,7 @@ process COMET {
     def bin_tol = binning.tolerance
     def bin_offset = binning.offset
     def inst = binning.instrument
-    log.info "Comet ${meta.mzml_id}: input fragment tolerance=${meta.fragmentmasstolerance} ${meta.fragmentmasstoleranceunit}; " +
+    log.debug "Comet ${meta.mzml_id}: input fragment tolerance=${meta.fragmentmasstolerance} ${meta.fragmentmasstoleranceunit}; " +
         "fragment_bin_tol=${binning.width} Da (full width), adapter_fragment_mass_tolerance=${bin_tol} Da, " +
         "fragment_bin_offset=${bin_offset}, instrument=${inst}, source=${binning.explicit ? 'explicit Comet settings' : 'input Da'}"
 
