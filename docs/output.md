@@ -248,6 +248,8 @@ QPX is the published quantification artifact for both DDA-LFQ and DDA-ISO. It is
 channel labels. The dataset is published flat under `qpx/`, the same layout as the DIA-NN (`quantmsdiann`) QPX
 output. See the [QPX specification](https://bigbio.github.io/qpx/) for the view schemas and file layout.
 
+When `--lfq_group_by` is set, `sdrf/lfq_groups/lfq_groups.tsv` records every run's group, the original grouping values, and the generated SDRF/design filenames. The corresponding files preserve the selected rows and reindex only structural OpenMS sample/fraction-group IDs. Conditions and biological-replicate values are retained. QPX datasets are published separately under `qpx/<group>.sdrf/`, with distinct filename prefixes to prevent collisions during reporting. MSstats tables also have distinct group-specific design prefixes. The ungrouped output layout is unchanged.
+
 #### MSstats post-processing (external)
 
 The pipeline no longer runs MSstats post-processing. Instead, quantms produces MSstats-compatible input files (`quant_tables/*_msstats_in.csv`) that users can provide directly to MSstats outside the pipeline for normalization, imputation, and statistical analysis.

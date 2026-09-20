@@ -1,0 +1,32 @@
+Changes in component 'bigbio/qpx/openmsconsensus'
+--- modules/bigbio/qpx/openmsconsensus/main.nf
++++ modules/bigbio/qpx/openmsconsensus/main.nf
+@@ -13,4 +13,3 @@
+     input:
+-    path(consensusxml)
+-    path(sdrf)
++    tuple path(consensusxml), path(sdrf)
+     val(project_accession)
+@@ -34,3 +33,3 @@
+     def args    = task.ext.args ?: ''
+-    def prefix  = project_accession ?: 'openms'
++    def prefix  = task.ext.prefix ?: project_accession ?: 'openms'
+     def acc_arg = project_accession ? "--project-accession ${project_accession}" : ''
+@@ -80,3 +79,3 @@
+     stub:
+-    def prefix = project_accession ?: 'openms'
++    def prefix = task.ext.prefix ?: project_accession ?: 'openms'
+     """
+
+--- modules/bigbio/qpx/openmsconsensus/tests/main.nf.test
++++ modules/bigbio/qpx/openmsconsensus/tests/main.nf.test
+@@ -25,6 +25,5 @@
+                 """
+-                input[0] = file("stub.consensusXML", checkIfExists: false)
+-                input[1] = file("stub_sample.sdrf.tsv", checkIfExists: false)
+-                input[2] = "PXD026600"
+-                input[3] = []
++                input[0] = [file("stub.consensusXML", checkIfExists: false), file("stub_sample.sdrf.tsv", checkIfExists: false)]
++                input[1] = "PXD026600"
++                input[2] = []
+                 """

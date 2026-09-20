@@ -16,6 +16,14 @@ nextflow run bigbio/quantms --input '/url/path/to/your/experiment_design.sdrf.ts
 
 The input file must be in [Sample-to-data-relationship format (SDRF)](https://pubs.acs.org/doi/abs/10.1021/acs.jproteome.0c00376) and can have `.sdrf`, `.tsv`, or `.csv` file extensions.
 
+### Independent LFQ groups
+
+Use `--lfq_group_by 'comment[instrument],comment[gradient duration]'` when a complete LFQ SDRF contains acquisitions that must be quantified separately. The named columns must exist and contain a value for every run. The default is a single LFQ analysis, as before.
+
+All runs are retained. The pipeline creates an OpenMS design and an SDRF for each combination of grouping values, then performs alignment, linking, protein inference and quantification independently within that group. A fractionated sample cannot cross groups. Missing runs or conflicting group assignments are errors. The original SDRF is not modified; condition and biological-replicate annotations are preserved in the generated files. Choose columns from the experimental design, not from the observed quantification results.
+
+Search and rescoring remain per run and precede grouping. They can be reused with `-resume` when their inputs and settings are unchanged. Each group's QPX retains the original project accession and has a distinct output prefix. Groups are separate analyses, not extra independent studies or biological replicates; cross-group feature matching is not performed.
+
 ### Search modifications from SDRF
 
 Fixed modifications are read exclusively from the SDRF modification annotations. If the parsed `FixedModifications` value is empty, quantms preserves an empty fixed-modification set instead of rejecting the input or adding a default modification such as Carbamidomethyl (C). Annotate modifications according to the experimental protocol; a modification that is variable must not be declared fixed just to make the input pass validation.
