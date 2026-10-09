@@ -64,7 +64,7 @@ See the [Comet parameter documentation](https://uwpr.github.io/Comet/parameters/
 
 The module uses `--ms2features_tolerance` and `--ms2features_tolerance_unit` only when both SDRF tolerance fields are absent. If only one field is missing, or the unit is unsupported, it stops with an error instead of combining SDRF and fallback values.
 
-MS2PIP with ppm requires MS2PIP 4.2 or newer and a quantms-rescoring adapter that supports its unit-aware API. The default quantms-rescoring `0.0.24` container does not provide this support. Before requesting MS2PIP with ppm, configure a compatible container for `MSRESCORE_FEATURES` in a custom Nextflow configuration. AlphaPeptDeep supports both Da and ppm.
+MS2PIP with ppm requires MS2PIP 4.2 or newer, which the default quantms-rescoring `0.0.25` container provides. AlphaPeptDeep supports both Da and ppm.
 
 ### Supported file formats
 

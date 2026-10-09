@@ -2,12 +2,13 @@ process PREPARE_LFQ_GROUPS {
     tag "${sdrf.baseName}"
     label 'process_single'
 
-    container 'quay.io/biocontainers/quantms-utils:0.0.30--pyhdfd78af_0'
+    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+        'https://depot.galaxyproject.org/singularity/quantms-utils:0.0.31--pyhdfd78af_0' :
+        'biocontainers/quantms-utils:0.0.31--pyhdfd78af_0' }"
 
     input:
     path(sdrf)
     path(expdes)
-    path(splitter)
     val(columns)
 
     output:
@@ -16,16 +17,16 @@ process PREPARE_LFQ_GROUPS {
     path 'versions.yml', emit: versions
 
     script:
-    def columnArgs = columns.collect { "'${it.replace("'", "'\"'\"'")}'" }.join(' ')
+    def columnArgs = columns.collect { "--column '${it.replace("'", "'\"'\"'")}'" }.join(' ')
     """
-    python3 '${splitter}' \\
+    quantmsutilsc splitlfqgroups \\
         --sdrf '${sdrf}' \\
         --design '${expdes}' \\
-        --columns ${columnArgs}
+        ${columnArgs}
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        Python: \$(python3 --version | cut -d ' ' -f 2)
+        quantms-utils: \$(pip show quantms-utils | grep "Version" | awk -F ': ' '{print \$2}')
     END_VERSIONS
     """
 }

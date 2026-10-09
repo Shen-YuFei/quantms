@@ -45,7 +45,7 @@ workflow LFQ {
     ch_lfq_runs = ch_file_preparation_results.join(ID.out.id_results)
     if (params.lfq_group_by) {
         def groupColumns = params.lfq_group_by.split(',').collect { it.trim() }
-        PREPARE_LFQ_GROUPS(file(params.input), ch_expdesign, file("${projectDir}/bin/split_lfq_groups.py"), groupColumns)
+        PREPARE_LFQ_GROUPS(file(params.input), ch_expdesign, groupColumns)
         ch_quant_inputs = group_lfq_inputs(ch_lfq_runs, PREPARE_LFQ_GROUPS.out.manifest)
         ch_software_versions = ch_software_versions.mix(PREPARE_LFQ_GROUPS.out.versions)
     } else {

@@ -636,7 +636,7 @@
                 "ms2features_generators": {
                     "type": "string",
                     "description": "Feature generators for MS2-based rescoring. Comma-separated list of tools to use.",
-                    "help_text": "Available generators: 'deeplc' (retention time prediction, always recommended), 'alphapeptdeep' (MS2 prediction, supports both Da and ppm), 'ms2pip' (MS2 prediction; ppm requires MS2PIP 4.2 or newer and a compatible quantms-rescoring adapter). Order matters: deeplc should be first. Examples: 'deeplc,alphapeptdeep' (default), 'deeplc,ms2pip', 'deeplc' (only retention time). The default quantms-rescoring 0.0.24 container does not support MS2PIP with ppm; configure a compatible container before using that combination.",
+                    "help_text": "Available generators: 'deeplc' (retention time prediction, always recommended), 'alphapeptdeep' (MS2 prediction, supports both Da and ppm), 'ms2pip' (MS2 prediction, supports both Da and ppm with MS2PIP 4.2 in the default quantms-rescoring 0.0.25 container). Order matters: deeplc should be first. Examples: 'deeplc,alphapeptdeep' (default), 'deeplc,ms2pip', 'deeplc' (only retention time).",
                     "fa_icon": "fas fa-font",
                     "default": "deeplc,alphapeptdeep"
                 },
@@ -650,7 +650,7 @@
                 "ms2features_tolerance": {
                     "type": "number",
                     "description": "Fragment mass tolerance for MS2Features when the SDRF tolerance value and unit are both absent",
-                    "help_text": "Used together with ms2features_tolerance_unit only when both SDRF fragment tolerance fields are absent. A complete SDRF value/unit pair takes precedence, including ppm; its numeric value is passed unchanged. Incomplete pairs and unsupported units are rejected instead of falling back. MS2PIP with ppm requires MS2PIP 4.2 or newer and a compatible quantms-rescoring adapter; the default 0.0.24 container does not provide this support.",
+                    "help_text": "Used together with ms2features_tolerance_unit only when both SDRF fragment tolerance fields are absent. A complete SDRF value/unit pair takes precedence, including ppm; its numeric value is passed unchanged. Incomplete pairs and unsupported units are rejected instead of falling back.",
                     "default": 0.05,
                     "fa_icon": "fas fa-sliders-h"
                 },
