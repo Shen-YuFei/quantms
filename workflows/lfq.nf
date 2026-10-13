@@ -43,11 +43,13 @@ workflow LFQ {
     // SUBWORKFLOW: PROTEOMICSLFQ
     //
     ch_lfq_runs = ch_file_preparation_results.join(ID.out.id_results)
+    ch_lfq_groups = channel.empty()
     if (params.lfq_group_by) {
         def groupColumns = params.lfq_group_by.split(',').collect { it.trim() }
         PREPARE_LFQ_GROUPS(file(params.input), ch_expdesign, groupColumns)
         ch_quant_inputs = group_lfq_inputs(ch_lfq_runs, PREPARE_LFQ_GROUPS.out.manifest)
         ch_software_versions = ch_software_versions.mix(PREPARE_LFQ_GROUPS.out.versions)
+        ch_lfq_groups = PREPARE_LFQ_GROUPS.out.manifest
     } else {
         ch_quant_inputs = ch_lfq_runs
             .toList()
@@ -89,6 +91,7 @@ workflow LFQ {
     final_result            = QPX_OPENMSCONSENSUS.out.qpx_dataset
     versions                = ch_software_versions
     msstats_in              = PROTEOMICSLFQ.out.out_msstats
+    lfq_groups              = ch_lfq_groups
 }
 
 /*

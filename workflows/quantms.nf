@@ -147,6 +147,8 @@ workflow QUANTMS {
         ch_ids_pmultiqc = ch_ids_pmultiqc.mix(LFQ.out.ch_pmultiqc_ids)
         ch_consensus_pmultiqc = ch_consensus_pmultiqc.mix(LFQ.out.ch_pmultiqc_consensus)
         ch_pipeline_results = ch_pipeline_results.mix(LFQ.out.final_result)
+        // The LFQ group table lets pmultiqc report cross-run QC per group.
+        ch_pipeline_results = ch_pipeline_results.mix(LFQ.out.lfq_groups)
         ch_msstats_in = ch_msstats_in.mix(LFQ.out.msstats_in)
         ch_versions = ch_versions.mix(LFQ.out.versions)
 
